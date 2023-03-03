@@ -74,10 +74,10 @@ class Client(object):
         while self.connected:
             if not self.muted:
                 try:
-                    data = self.audioHelper.audio_input_read()
+                    # data = self.audioHelper.audio_input_read()
                     # print(len(data))
-                    # self.udp_socket.sendto(
-                    #     data, (self.target_ip, self.target_udp_port))
+                    self.udp_socket.sendto(
+                        b'1212', (self.target_ip, self.target_udp_port))
                     print("not sending over udp")
                 except Exception as err:
                     print((self.target_ip, self.target_udp_port))
