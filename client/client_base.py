@@ -76,8 +76,8 @@ class Client(object):
                 try:
                     data = self.audioHelper.audio_input_read()
                     # print(len(data))
-                    self.udp_socket.sendto(
-                        data, (self.target_ip, self.target_udp_port))
+                    # self.udp_socket.sendto(
+                    #     data, (self.target_ip, self.target_udp_port))
                 except Exception as err:
                     print((self.target_ip, self.target_udp_port))
                     # print(data)
