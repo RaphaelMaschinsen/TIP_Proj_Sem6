@@ -19,6 +19,7 @@ class AudioHelper:
                     rate=RATE, input=True,
                     frames_per_buffer=CHUNK)
         print(self.audio_stream_in)
+        self.audio_stream_in.read(CHUNK)
 
     def audio_input_read(self):
         return self.audio_stream_in.read(CHUNK)
