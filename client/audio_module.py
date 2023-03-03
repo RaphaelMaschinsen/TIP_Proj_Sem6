@@ -22,7 +22,7 @@ class AudioHelper:
         self.audio_stream_in.read(CHUNK)
 
     def audio_input_read(self):
-        return self.audio_stream_in.read(CHUNK)
+        return self.audio_stream_in.read(CHUNK, exception_on_overflow = False)
     
     def close_input_stream(self) -> None:
         self.audio_stream_in.stop_stream()
