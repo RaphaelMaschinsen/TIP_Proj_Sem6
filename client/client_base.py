@@ -1,14 +1,16 @@
-#TODO logout
+# TODO logout
 
 import socket
-import sys, time
+import sys
+import time
 import threading
 from audio_module import *
 from settings import CHUNK
 
+
 class Client(object):
-    def __init__(self,target_ip,target_port,nick) -> None:
-        
+    def __init__(self, target_ip, target_port, nick) -> None:
+
         self.target_ip = target_ip
         self.target_port = target_port
         self.error_message = ""
@@ -23,9 +25,9 @@ class Client(object):
 
         try:
             self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.tcp_socket.connect((self.target_ip,self.target_port))
+            self.tcp_socket.connect((self.target_ip, self.target_port))
             self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            self.udp_socket.bind(("127.0.0.1", 0)) #FIXME: IP Address
+            self.udp_socket.bind(("127.0.0.1", 0))  # FIXME: IP Address
             self.udp_port = self.udp_socket.getsockname()[1]
 
         except Exception as err:
@@ -34,16 +36,18 @@ class Client(object):
             self.error_message = "Couldn't connect!"
 
         try:
-            self.tcp_socket.sendall(bytes(f"{self.nick}:{self.udp_port}", 'UTF-16'))
+            self.tcp_socket.sendall(
+                bytes(f"{self.nick}:{self.udp_port}", 'UTF-16'))
             approve = self.tcp_socket.recv(CHUNK)
             approve = str(approve, 'UTF-16').split(":")
-            if(approve[0] == "ack"):
+            if (approve[0] == "ack"):
                 self.target_udp_port = int(approve[1])
-                self.error_message = "Connected\nUDP Port:" + str(self.udp_port)
+                self.error_message = "Connected\nUDP Port:" + \
+                    str(self.udp_port)
                 self.connected = True
-            elif(approve[0] == "ful"):
+            elif (approve[0] == "ful"):
                 self.error_message = "Server is full!"
-            elif(approve[0] == "nak"):
+            elif (approve[0] == "nak"):
                 self.error_message = "Nick already taken!"
 
         except Exception as err:
@@ -53,8 +57,9 @@ class Client(object):
         print(self.error_message)
         self.audioHelper = AudioHelper()
 
-        #Test
-        reciver = threading.Thread(target=self.get_perticipants, daemon=True).start()
+        # Test
+        reciver = threading.Thread(
+            target=self.get_perticipants, daemon=True).start()
 
     def receive_data(self):
         while self.connected:
@@ -70,7 +75,8 @@ class Client(object):
                 try:
                     data = self.audioHelper.audio_input_read()
                     # print(len(data))
-                    self.udp_socket.sendto(data, (self.target_ip, self.target_udp_port))
+                    self.udp_socket.sendto(
+                        data, (self.target_ip, self.target_udp_port))
                 except Exception as err:
                     print(err)
 
@@ -79,26 +85,28 @@ class Client(object):
         self.audioHelper.open_input_stream()
         self.audioHelper.open_output_stream()
 
-        self.reciver = threading.Thread(target=self.receive_data, daemon=True).start()
-        self.sender = threading.Thread(target=self.send_data, daemon=True).start()
+        self.reciver = threading.Thread(
+            target=self.receive_data, daemon=True).start()
+        self.sender = threading.Thread(
+            target=self.send_data, daemon=True).start()
 
     def get_perticipants(self):
         while self.connected:
             try:
                 data = self.tcp_socket.recv(CHUNK)
-                if(str(data,'UTF-16') == "new"):
+                if (str(data, 'UTF-16') == "new"):
                     self.other_participants.clear()
-                    while True:  
+                    while True:
                         data = self.tcp_socket.recv(CHUNK)
-                        data = str(data,'UTF-16')
-                        if(data == self.nick or data == '0'):
+                        data = str(data, 'UTF-16')
+                        if (data == self.nick or data == '0'):
                             continue
-                        elif(data == "fin"):
+                        elif (data == "fin"):
                             break
                         else:
                             self.other_participants.append(data)
             except socket.error as err:
-                    print(err)
+                print(err)
 
     def mute(self):
         self.muted = not self.muted
@@ -114,8 +122,9 @@ class Client(object):
         except Exception as err:
             print(err)
 
+
 if __name__ == '__main__':
-   c = Client("127.0.0.1",8000,"Tester3")
-   c.run_client()
-   while True:
-       pass
+    client = Client("127.0.0.1", 8000, "Maschinsen")
+    client.run_client()
+    while True:
+        pass
