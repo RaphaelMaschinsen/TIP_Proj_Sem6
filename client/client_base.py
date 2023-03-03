@@ -66,6 +66,7 @@ class Client(object):
             try:
                 data = self.udp_socket.recv(4096)
                 self.audioHelper.audio_output_write(data)
+                print(data)
             except Exception as err:
                 print(err)
 
@@ -75,8 +76,9 @@ class Client(object):
                 try:
                     data = self.audioHelper.audio_input_read()
                     # print(len(data))
-                    self.udp_socket.sendto(
-                        data, (self.target_ip, self.target_udp_port))
+                    # self.udp_socket.sendto(
+                    #     data, (self.target_ip, self.target_udp_port))
+                    print("not sending over udp")
                 except Exception as err:
                     print((self.target_ip, self.target_udp_port))
                     print(data)
