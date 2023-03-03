@@ -79,6 +79,7 @@ class Client(object):
                     # self.udp_socket.sendto(
                     #     data, (self.target_ip, self.target_udp_port))
                     time.sleep(1)
+                    print("sending")
                 except Exception as err:
                     # print(data)
                     print(err)
