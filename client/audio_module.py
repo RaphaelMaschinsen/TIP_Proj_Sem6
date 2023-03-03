@@ -4,10 +4,10 @@ from settings import *
 
 class AudioHelper:
     def __init__(self):
-        self.pyaudio_in: pyaudio.PyAudio = pyaudio.PyAudio()
-        self.pyaudio_out: pyaudio.PyAudio = pyaudio.PyAudio()
-        self.audio_stream_in: Optional[Stream] = None
-        self.audio_stream_out: Optional[Stream] = None
+        self.pyaudio_in = pyaudio.PyAudio()
+        self.pyaudio_out = pyaudio.PyAudio()
+        self.audio_stream_in = None
+        self.audio_stream_out  = None
 
     def terminate(self) -> None:
         #TODO: Check if audio_stream_in and audio_stream_out is stopped and closed
