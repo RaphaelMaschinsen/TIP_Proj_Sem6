@@ -18,6 +18,7 @@ class AudioHelper:
         self.audio_stream_in = self.pyaudio_in.open(format=FORMAT, channels=CHANNELS,
                     rate=RATE, input=True,
                     frames_per_buffer=CHUNK)
+        print(self.audio_stream_in)
 
     def audio_input_read(self):
         return self.audio_stream_in.read(CHUNK)
