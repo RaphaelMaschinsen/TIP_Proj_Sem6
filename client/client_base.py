@@ -29,6 +29,7 @@ class Client(object):
             self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.udp_socket.bind(("127.0.0.1", 0))  # FIXME: IP Address
             self.udp_port = self.udp_socket.getsockname()[1]
+            print(self.udp_socket.getsockname())
 
         except Exception as err:
             print('ERROR: Counld\'t connect')
@@ -75,13 +76,9 @@ class Client(object):
             if not self.muted:
                 try:
                     data = self.audioHelper.audio_input_read()
-                    # print(len(data))
-                    # self.udp_socket.sendto(
-                    #     data, (self.target_ip, self.target_udp_port))
-                    time.sleep(1)
-                    print(data)
+                    self.udp_socket.sendto(data, (self.target_ip, self.target_udp_port))
                 except Exception as err:
-                    # print(data)
+                    print(self.target_ip, self.target_udp_port)
                     print(err)
 
     def run_client(self):
@@ -128,7 +125,7 @@ class Client(object):
 
 
 if __name__ == '__main__':
-    client = Client("127.0.0.1", 8000, "Maschinsen")
+    client = Client("192.168.1.26", 8000, "Maschinsen")
     client.run_client()
     while True:
         pass
